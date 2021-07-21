@@ -11,10 +11,10 @@ import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.ivanmoreno.app.DatosTest;
 import com.ivanmoreno.app.exceptions.DineroInsuficienteException;
@@ -27,18 +27,22 @@ import com.ivanmoreno.app.repositories.CuentaRepository;
 @SpringBootTest
 class ProjectWithTestApplicationTests {
 
+	@MockBean
 	CuentaRepository cuentaRepository;
+	
+	@MockBean
 	BancoRepository bancoRepository;
 	
+	@Autowired
 	CuentaService cuentaService;
 	
-	@BeforeEach
-	void setUp() {
-		cuentaRepository = mock(CuentaRepository.class);
-		bancoRepository = mock(BancoRepository.class);
-		
-		cuentaService = new CuentaServiceImpl(cuentaRepository, bancoRepository);
-	}
+//	@BeforeEach
+//	void setUp() {
+//		cuentaRepository = mock(CuentaRepository.class);
+//		bancoRepository = mock(BancoRepository.class);
+//		
+//		cuentaService = new CuentaServiceImpl(cuentaRepository, bancoRepository);
+//	}
 	
 	@Test
 	void contextLoads() {

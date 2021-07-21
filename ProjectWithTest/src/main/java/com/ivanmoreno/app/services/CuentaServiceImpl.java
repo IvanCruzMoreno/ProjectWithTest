@@ -2,11 +2,14 @@ package com.ivanmoreno.app.services;
 
 import java.math.BigDecimal;
 
+import org.springframework.stereotype.Service;
+
 import com.ivanmoreno.app.models.Banco;
 import com.ivanmoreno.app.models.Cuenta;
 import com.ivanmoreno.app.repositories.BancoRepository;
 import com.ivanmoreno.app.repositories.CuentaRepository;
 
+@Service
 public class CuentaServiceImpl implements CuentaService {
 
 	private CuentaRepository cuentaRepo;
