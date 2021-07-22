@@ -22,37 +22,37 @@ public class CuentaServiceImpl implements CuentaService {
 	
 	@Override
 	public Cuenta findById(Long id) {
-		return cuentaRepo.findById(id);
+		return cuentaRepo.findById(id).orElseThrow();
 	}
 
 	@Override
 	public int revisarTotalTransferencias(Long bancoId) {
-		Banco banco = bancoRepo.findById(bancoId);
+		Banco banco = bancoRepo.findById(bancoId).orElseThrow();
 		return banco.getTotalTransferencias();
 	}
 
 	@Override
 	public BigDecimal revisarSaldo(Long cuentaId) {
-		Cuenta cuenta = cuentaRepo.findById(cuentaId);
+		Cuenta cuenta = cuentaRepo.findById(cuentaId).orElseThrow();
 		return cuenta.getSaldo();
 	}
 
 	@Override
 	public void transferir(Long numCuentaOrigen, Long numCuentaDestino, BigDecimal monto, Long BancoId) {
 	
-		Cuenta cuentaOrigen = cuentaRepo.findById(numCuentaOrigen);
+		Cuenta cuentaOrigen = cuentaRepo.findById(numCuentaOrigen).orElseThrow();
 		cuentaOrigen.debito(monto);
-		cuentaRepo.update(cuentaOrigen);
+		cuentaRepo.save(cuentaOrigen);
 		
-		Cuenta cuentaDestino = cuentaRepo.findById(numCuentaDestino);
+		Cuenta cuentaDestino = cuentaRepo.findById(numCuentaDestino).orElseThrow();
 		cuentaDestino.credito(monto);
-		cuentaRepo.update(cuentaDestino);
+		cuentaRepo.save(cuentaDestino);
 		
-		Banco banco = bancoRepo.findById(BancoId);
+		Banco banco = bancoRepo.findById(BancoId).orElseThrow();
 		int totalTransferencias = banco.getTotalTransferencias();
 		banco.setTotalTransferencias(++totalTransferencias);
 		
-		bancoRepo.update(banco);
+		bancoRepo.save(banco);
 	}
 
 }

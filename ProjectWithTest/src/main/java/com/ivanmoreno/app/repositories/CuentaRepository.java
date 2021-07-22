@@ -1,15 +1,11 @@
 package com.ivanmoreno.app.repositories;
 
-import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ivanmoreno.app.models.Cuenta;
 
-public interface CuentaRepository {
+public interface CuentaRepository extends JpaRepository<Cuenta, Long> {
 
-	List<Cuenta> findAll();
-	
-	Cuenta findById(Long id);
-
-	void update(Cuenta cuenta);
 }
 

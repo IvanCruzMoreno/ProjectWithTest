@@ -1,14 +1,11 @@
 package com.ivanmoreno.app.repositories;
 
-import java.util.List;
+
+
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ivanmoreno.app.models.Banco;
 
-public interface BancoRepository {
+public interface BancoRepository extends JpaRepository<Banco, Long>{
 
-	List<Banco> findAll();
-	
-	Banco findById(Long id);
-	
-	void update(Banco banco);
 }
