@@ -1,6 +1,7 @@
 package com.ivanmoreno.app.services;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,6 +59,18 @@ public class CuentaServiceImpl implements CuentaService {
 		banco.setTotalTransferencias(++totalTransferencias);
 		
 		bancoRepo.save(banco);
+	}
+
+	@Override
+	public List<Cuenta> findAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Cuenta save(Cuenta cuenta) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
