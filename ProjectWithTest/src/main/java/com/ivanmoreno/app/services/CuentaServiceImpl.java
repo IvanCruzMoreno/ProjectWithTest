@@ -3,6 +3,7 @@ package com.ivanmoreno.app.services;
 import java.math.BigDecimal;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ivanmoreno.app.models.Banco;
 import com.ivanmoreno.app.models.Cuenta;
@@ -21,23 +22,27 @@ public class CuentaServiceImpl implements CuentaService {
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
 	public Cuenta findById(Long id) {
 		return cuentaRepo.findById(id).orElseThrow();
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public int revisarTotalTransferencias(Long bancoId) {
 		Banco banco = bancoRepo.findById(bancoId).orElseThrow();
 		return banco.getTotalTransferencias();
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public BigDecimal revisarSaldo(Long cuentaId) {
 		Cuenta cuenta = cuentaRepo.findById(cuentaId).orElseThrow();
 		return cuenta.getSaldo();
 	}
 
 	@Override
+	@Transactional
 	public void transferir(Long numCuentaOrigen, Long numCuentaDestino, BigDecimal monto, Long BancoId) {
 	
 		Cuenta cuentaOrigen = cuentaRepo.findById(numCuentaOrigen).orElseThrow();
