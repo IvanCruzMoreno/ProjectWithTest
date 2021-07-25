@@ -3,6 +3,7 @@ package com.ivanmoreno.app.services;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -10,6 +11,8 @@ import static org.mockito.Mockito.*;
 
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -130,5 +133,38 @@ class ProjectWithTestApplicationTests {
 		assertSame(cuenta1, cuenta2);
 		assertTrue(cuenta1 == cuenta2);
 	}
-
+	
+	@Test
+	void testFindAll() {
+		List<Cuenta> cuentasTest  = Arrays.asList(DatosTest.crearCuenta001().orElseThrow(), DatosTest.crearCuenta002().orElseThrow());
+		
+		when(cuentaRepository.findAll()).thenReturn(cuentasTest);
+		
+		List<Cuenta> cuentas = cuentaService.findAll();
+		
+		assertFalse(cuentas.isEmpty());
+		assertEquals(2, cuentas.size());
+		assertTrue(cuentas.contains(DatosTest.crearCuenta002().orElseThrow()));
+		
+		verify(cuentaRepository).findAll();
+	}
+	
+	@Test
+	void testSave() {
+		Cuenta newCuenta = new Cuenta(null, "Pedro", new BigDecimal("999"));
+		
+		when(cuentaRepository.save(any())).then(invocation -> {
+			Cuenta cuenta = invocation.getArgument(0);
+			cuenta.setId(3L);
+			return cuenta;
+		});
+		
+		Cuenta cuenta = cuentaService.save(newCuenta);
+		
+		assertEquals("Pedro", cuenta.getPersona());
+		assertEquals(3, cuenta.getId());
+		assertEquals("999", cuenta.getSaldo().toPlainString());
+		
+		verify(cuentaRepository).save(any());
+	}
 }
