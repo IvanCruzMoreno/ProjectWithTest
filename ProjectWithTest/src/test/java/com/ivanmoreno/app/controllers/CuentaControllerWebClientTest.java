@@ -176,4 +176,32 @@ class CuentaControllerWebClientTest {
 				assertEquals("4000", cuentaRespuesta.getSaldo().toPlainString());
 			});
 	}
+	
+	@Test
+	@Order(8)
+	void testDelete() {
+		
+		client.get().uri("/api/cuentas")
+		.exchange()
+			.expectStatus().isOk()
+			.expectBodyList(Cuenta.class)
+			.hasSize(4);
+		
+		client.delete().uri("/api/cuentas/3")
+		.exchange()
+			.expectStatus().isNoContent()
+			.expectBody().isEmpty();
+		
+		client.get().uri("/api/cuentas")
+		.exchange()
+			.expectStatus().isOk()
+			.expectBodyList(Cuenta.class)
+			.hasSize(3);
+		
+		client.get().uri("/api/cuentas/3")
+		.exchange()
+			.expectStatus().is5xxServerError();
+	}
+	
+	
 }

@@ -18,4 +18,6 @@ public interface CuentaService {
 	List<Cuenta> findAll();
 	
 	Cuenta save(Cuenta cuenta);
+	
+	void deleteById(Long id);
 }
