@@ -9,7 +9,10 @@ import java.util.Map;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -18,9 +21,10 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ivanmoreno.app.models.Cuenta;
 import com.ivanmoreno.app.models.TransaccionDto;
 
-
+@TestMethodOrder(OrderAnnotation.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class CuentaControllerWebClientTest {
 
@@ -35,6 +39,7 @@ class CuentaControllerWebClientTest {
 	}
 	
 	@Test
+	@Order(2)
 	void testTransferir() throws JsonProcessingException {
 		
 		TransaccionDto dto = new TransaccionDto();
@@ -62,5 +67,32 @@ class CuentaControllerWebClientTest {
 				.json(objectMapper.writeValueAsString(response));
 				
 	}
+	
+	@Test
+	@Order(1)
+	void testDetalle() {
+		
+		client.get().uri("/api/cuentas/1")
+		.exchange()
+			.expectStatus().isOk()
+			.expectHeader().contentType(MediaType.APPLICATION_JSON)
+			.expectBody()
+				.jsonPath("$.persona").isEqualTo("Ivan")
+				.jsonPath("$.saldo").isEqualTo(200);
+	}
 
+	@Test
+	void testDetalle2() {
+		
+		client.get().uri("/api/cuentas/2")
+		.exchange()
+			.expectStatus().isOk()
+			.expectHeader().contentType(MediaType.APPLICATION_JSON)
+			.expectBody(Cuenta.class)
+			.consumeWith(response -> {
+				Cuenta cuentaRespuesta = response.getResponseBody();
+				assertEquals("Carlos", cuentaRespuesta.getPersona());
+				assertEquals("60.00", cuentaRespuesta.getSaldo().toPlainString());
+			});
+	}
 }
